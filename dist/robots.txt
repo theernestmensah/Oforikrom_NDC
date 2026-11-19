@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ndc-oforikrom.example.com/sitemap-index.xml

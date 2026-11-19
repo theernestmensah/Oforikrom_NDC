@@ -1,0 +1,69 @@
+---
+import Icon from '../Icon.astro';
+import Kente from '../Kente.astro';
+---
+
+<section class="border-y border-line bg-paper-2 py-20 lg:py-28">
+  <div class="wrap">
+    <div class="max-w-3xl" data-reveal>
+      <p class="eyebrow">The Reset agenda</p>
+      <h2 class="display-lg mt-4">Resetting Ghana, felt in Oforikrom.</h2>
+      <p class="mt-5 max-w-[56ch] text-lg text-ink-2">
+        The NDC government's programme, and what it means in our markets, on our streets and on campus.
+      </p>
+    </div>
+
+    <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
+      <!-- 24-Hour Economy -->
+      <article
+        class="relative flex flex-col justify-between overflow-hidden rounded-box bg-ndc-red p-7 text-white sm:col-span-2 sm:p-10 lg:col-span-4 lg:row-span-2 lg:min-h-[30rem]"
+        data-reveal
+      >
+        <Kente variant={0} direction="y" class="absolute inset-y-0 right-0 w-5 sm:w-7" />
+        <Icon name="moon-stars" size={44} class="text-white/90" />
+        <div class="mt-16 max-w-[34ch] pr-6">
+          <h3 class="text-[clamp(2rem,4vw,3.25rem)] font-extrabold [font-stretch:84%]">The <span class="whitespace-nowrap">24-Hour</span> Economy</h3>
+          <p class="mt-4 text-lg text-white/90">
+            Shifts, not shutdowns. The plan keeps production, markets and services running around the clock. For traders in Ayigya, Anloga and Bomso,
+            that means longer trading hours and more jobs.
+          </p>
+          <a href="/news/24-hour-economy-oforikrom" class="mt-7 inline-flex items-center gap-2 font-semibold text-white underline decoration-white/50 underline-offset-4 hover:decoration-white">
+            What it means for our markets <Icon name="arrow-right" size={18} />
+          </a>
+        </div>
+      </article>
+
+      <!-- No-Fees-Stress -->
+      <article class="flex flex-col rounded-box bg-ndc-green p-7 text-white lg:col-span-2" data-reveal style="--d:1">
+        <div class="flex items-start justify-between gap-4">
+          <Icon name="graduation-cap" size={36} />
+          <span class="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold">Launched July 2025</span>
+        </div>
+        <h3 class="mt-8 text-2xl font-bold">No-Fees-Stress</h3>
+        <p class="mt-2 text-white/90">Government pays first-year academic fees at public tertiary institutions, including for KNUST freshers.</p>
+      </article>
+
+      <!-- Women's Development Bank -->
+      <article class="flex flex-col rounded-box border border-line bg-card p-7 lg:col-span-2" data-reveal style="--d:2">
+        <Icon name="storefront" size={36} class="text-accent-text" />
+        <h3 class="mt-8 text-2xl font-bold">Women's Development Bank</h3>
+        <p class="mt-2 text-ink-2">Affordable credit for women-owned businesses, from market stalls to small shops.</p>
+      </article>
+
+      <!-- Free Primary Healthcare -->
+      <article class="flex flex-col rounded-box border border-line bg-card p-7 lg:col-span-3" data-reveal style="--d:1">
+        <Icon name="first-aid-kit" size={36} class="text-go-text" />
+        <h3 class="mt-8 text-2xl font-bold">Free Primary Healthcare</h3>
+        <p class="mt-2 max-w-[40ch] text-ink-2">Removing the cost barrier to basic care at public health facilities, so families seek treatment early.</p>
+      </article>
+
+      <!-- Big Push -->
+      <article class="relative overflow-hidden rounded-box bg-ndc-black p-7 text-ndc-white lg:col-span-3" data-reveal style="--d:2">
+        <Kente variant={3} class="absolute inset-x-0 top-0 h-3" />
+        <Icon name="road-horizon" size={36} class="mt-2" />
+        <h3 class="mt-8 text-2xl font-bold">The Big Push</h3>
+        <p class="mt-2 max-w-[40ch] text-ndc-white/80">A national infrastructure drive to build and repair the roads that connect communities, jobs and markets.</p>
+      </article>
+    </div>
+  </div>
+</section>

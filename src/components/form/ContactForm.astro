@@ -1,0 +1,35 @@
+---
+import { areas } from '../../data/areas';
+import Field from './Field.astro';
+import FormShell from './FormShell.astro';
+
+const areaOptions = [...areas.map((a) => ({ value: a.id, label: a.name })), { value: 'outside', label: 'Outside Oforikrom' }];
+const topics = [
+  { value: 'general', label: 'General question' },
+  { value: 'branch', label: 'Connect me with my branch' },
+  { value: 'community', label: 'Raise a community issue' },
+  { value: 'business', label: 'Business and 24-Hour Economy ideas' },
+  { value: 'media', label: 'Media enquiry' },
+];
+---
+
+<FormShell id="contact-form" subject="Message from the NDC Oforikrom website" submitLabel="Send message" successTitle="Message sent">
+  <div class="grid gap-6 sm:grid-cols-2">
+    <Field name="name" label="Full name" required autocomplete="name" />
+    <Field name="phone" label="Phone or WhatsApp number" type="tel" inputmode="tel" required autocomplete="tel" />
+    <Field name="topic" label="What is it about?" as="select" options={topics} required />
+    <Field name="area" label="Where do you live?" as="select" options={areaOptions} />
+    <Field name="message" label="Message" as="textarea" required class="sm:col-span-2" />
+  </div>
+</FormShell>
+
+<script>
+  // Pre-select the electoral area when arriving from the branch finder (/contact?area=...).
+  const area = new URLSearchParams(location.search).get('area');
+  const select = document.querySelector<HTMLSelectElement>('#contact-form [name="area"]');
+  const topic = document.querySelector<HTMLSelectElement>('#contact-form [name="topic"]');
+  if (area && select?.querySelector(`option[value="${CSS.escape(area)}"]`)) {
+    select.value = area;
+    if (topic) topic.value = 'branch';
+  }
+</script>

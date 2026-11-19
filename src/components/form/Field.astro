@@ -1,0 +1,69 @@
+---
+/** A labelled form field with help and error text. Label above, error below. */
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props {
+  name: string;
+  label: string;
+  as?: 'input' | 'select' | 'textarea';
+  type?: HTMLAttributes<'input'>['type'];
+  required?: boolean;
+  help?: string;
+  placeholder?: string;
+  autocomplete?: string;
+  inputmode?: 'text' | 'tel' | 'email' | 'numeric';
+  options?: { value: string; label: string; group?: string }[];
+  class?: string;
+}
+
+const { name, label, as = 'input', type = 'text', required = false, help, placeholder, autocomplete, inputmode, options = [], class: className = '' } = Astro.props;
+const id = `f-${name}`;
+const describedBy = [help && `${id}-help`, `${id}-error`].filter(Boolean).join(' ');
+const groups = [...new Set(options.map((o) => o.group).filter(Boolean))] as string[];
+---
+
+<div class={`grid content-start gap-2 ${className}`}>
+  <label for={id} class="field-label">
+    {label}
+    {!required && <span class="font-normal text-muted"> (optional)</span>}
+  </label>
+  {
+    as === 'select' ? (
+      <select id={id} name={name} class="field" required={required} aria-describedby={describedBy}>
+        <option value="">Choose one</option>
+        {groups.length > 0
+          ? groups.map((g) => (
+              <optgroup label={g}>
+                {options
+                  .filter((o) => o.group === g)
+                  .map((o) => (
+                    <option value={o.value}>{o.label}</option>
+                  ))}
+              </optgroup>
+            ))
+          : null}
+        {options
+          .filter((o) => !o.group)
+          .map((o) => (
+            <option value={o.value}>{o.label}</option>
+          ))}
+      </select>
+    ) : as === 'textarea' ? (
+      <textarea id={id} name={name} class="field" required={required} placeholder={placeholder} aria-describedby={describedBy} />
+    ) : (
+      <input
+        id={id}
+        name={name}
+        type={type}
+        class="field"
+        required={required}
+        placeholder={placeholder}
+        autocomplete={autocomplete}
+        inputmode={inputmode}
+        aria-describedby={describedBy}
+      />
+    )
+  }
+  {help && <p id={`${id}-help`} class="field-help">{help}</p>}
+  <p id={`${id}-error`} class="field-error" data-error-for={name} hidden></p>
+</div>

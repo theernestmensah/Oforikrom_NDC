@@ -1,0 +1,30 @@
+---
+/** Phosphor icons (https://phosphoricons.com), rendered inline at build time. */
+import { icons } from '@iconify-json/ph';
+
+interface Props {
+  name: string;
+  size?: number | string;
+  class?: string;
+  label?: string;
+}
+
+const { name, size = 20, class: className, label } = Astro.props;
+const icon = icons.icons[name];
+if (!icon) throw new Error(`Unknown icon "${name}". Browse names at https://phosphoricons.com`);
+const width = icon.width ?? icons.width ?? 256;
+const height = icon.height ?? icons.height ?? 256;
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox={`0 0 ${width} ${height}`}
+  width={size}
+  height={size}
+  fill="currentColor"
+  class={className}
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+  set:html={icon.body}
+/>

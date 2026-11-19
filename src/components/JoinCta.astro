@@ -1,0 +1,33 @@
+---
+import Icon from './Icon.astro';
+import Kente from './Kente.astro';
+
+interface Props {
+  title?: string;
+  text?: string;
+}
+
+const {
+  title = 'Your branch is waiting.',
+  text = 'Join the NDC in Oforikrom, volunteer as a polling agent, or bring your skills to the campaign. Every role counts.',
+} = Astro.props;
+---
+
+<section class="wrap py-16 lg:py-24">
+  <div class="relative overflow-hidden rounded-box bg-ndc-red px-6 py-14 text-white sm:px-12 lg:px-16 lg:py-20" data-reveal>
+    <div class="absolute inset-y-0 right-0 hidden w-[28%] md:flex" aria-hidden="true">
+      <Kente variant={1} direction="y" class="h-full flex-1" />
+      <Kente variant={3} direction="y" offset={40} class="h-full flex-1" />
+      <Kente variant={0} direction="y" offset={70} class="h-full flex-1" />
+    </div>
+    <Kente variant={1} class="absolute inset-x-0 bottom-0 h-3 md:hidden" />
+    <div class="relative max-w-2xl md:max-w-[62%]">
+      <h2 class="display-lg text-white">{title}</h2>
+      <p class="mt-5 max-w-[46ch] text-lg text-white/90 sm:text-xl">{text}</p>
+      <div class="mt-9 flex flex-wrap gap-3">
+        <a href="/get-involved#join" class="btn btn-light">Join the party <Icon name="arrow-right" class="btn-arrow" /></a>
+        <a href="/get-involved#volunteer" class="btn btn-ghost-light">Volunteer</a>
+      </div>
+    </div>
+  </div>
+</section>

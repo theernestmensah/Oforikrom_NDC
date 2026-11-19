@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import NewsCard from '../../components/NewsCard.astro';
+import PageHero from '../../components/PageHero.astro';
+import Base from '../../layouts/Base.astro';
+
+const posts = (await getCollection('news')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const [latest, ...rest] = posts;
+---
+
+<Base title="News" description="News, explainers and announcements from the NDC in Oforikrom Constituency.">
+  <PageHero crumb="News" title="News and updates" intro="Constituency announcements, guides for members, and plain explainers on what government programmes mean for Oforikrom." variant={3} />
+
+  <section class="wrap py-16 lg:py-24">
+    {
+      latest ? (
+        <>
+          <div class="max-w-4xl" data-reveal>
+            <NewsCard post={latest} size="feature" variant={0} />
+          </div>
+          {rest.length > 0 && (
+            <>
+              <h2 class="display-md mt-20" data-reveal>
+                More from the constituency
+              </h2>
+              <ul class="mt-8 grid gap-x-12 md:grid-cols-2">
+                {rest.map((post, i) => (
+                  <li class="border-t border-line py-7" data-reveal style={`--d:${i % 2}`}>
+                    <NewsCard post={post} variant={i + 1} />
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </>
+      ) : (
+        <div class="rounded-box border border-dashed border-line-strong p-12 text-center">
+          <p class="text-xl font-semibold">No news yet.</p>
+          <p class="mt-2 text-ink-2">Add a Markdown file to src/content/news to publish the first post.</p>
+        </div>
+      )
+    }
+  </section>
+</Base>

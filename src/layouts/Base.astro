@@ -1,0 +1,129 @@
+---
+import '@fontsource-variable/bricolage-grotesque/standard.css';
+import '@fontsource-variable/figtree';
+import '../styles/global.css';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Social share image, relative to the site root. */
+  image?: string;
+  type?: 'website' | 'article';
+}
+
+const { title, description = site.description, image = '/og.png', type = 'website' } = Astro.props;
+const pageTitle = title ? `${title} | ${site.name}` : `${site.name} | National Democratic Congress, Oforikrom Constituency`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const imageUrl = new URL(image, Astro.site);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'PoliticalParty',
+  name: site.fullName,
+  alternateName: site.name,
+  slogan: site.motto,
+  url: Astro.site?.toString(),
+  logo: new URL('/favicon.svg', Astro.site).toString(),
+  areaServed: {
+    '@type': 'AdministrativeArea',
+    name: 'Oforikrom Constituency, Kumasi, Ashanti Region, Ghana',
+  },
+  ...(site.contact.email ? { email: site.contact.email } : {}),
+  ...(site.contact.phone ? { telephone: site.contact.phone } : {}),
+  sameAs: Object.values(site.socials).filter(Boolean),
+};
+---
+
+<!doctype html>
+<html lang="en-GH" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      // Set the colour theme before the page paints, to avoid a flash.
+      (function () {
+        var root = document.documentElement;
+        root.classList.remove('no-js');
+        var stored = null;
+        try {
+          stored = localStorage.getItem('theme');
+        } catch (e) {}
+        var media = window.matchMedia('(prefers-color-scheme: dark)');
+        root.dataset.theme = stored || (media.matches ? 'dark' : 'light');
+        media.addEventListener('change', function (e) {
+          var saved = null;
+          try {
+            saved = localStorage.getItem('theme');
+          } catch (err) {}
+          if (!saved) root.dataset.theme = e.matches ? 'dark' : 'light';
+        });
+      })();
+    </script>
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#c8102e" />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title ?? site.name} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_GH" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title ?? site.name} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <slot name="head" />
+  </head>
+  <body class="flex min-h-[100dvh] flex-col">
+    <a
+      href="#main"
+      class="fixed left-4 top-3 z-50 -translate-y-24 rounded-full bg-ink px-5 py-3 font-semibold text-paper transition-transform focus:translate-y-0"
+    >
+      Skip to content
+    </a>
+    <Header />
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      // Reveal sections as they scroll into view.
+      const targets = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.12 },
+        );
+        targets.forEach((el) => io.observe(el));
+      } else {
+        targets.forEach((el) => el.classList.add('is-visible'));
+      }
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  .no-js .js-only {
+    display: none !important;
+  }
+</style>

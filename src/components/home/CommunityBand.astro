@@ -1,0 +1,41 @@
+---
+import { allCommunities } from '../../data/areas';
+import Icon from '../Icon.astro';
+import Kente from '../Kente.astro';
+
+// Shuffle into a fixed order that mixes the zones, so neighbouring names are not all from one area.
+const names = [...allCommunities].sort((a, b) => (a.length * 7) % 11 - (b.length * 7) % 11 || a.localeCompare(b));
+---
+
+<section aria-label="Communities in Oforikrom Constituency" class="marquee relative bg-ndc-black text-ndc-white">
+  <Kente variant={2} class="h-2.5" />
+  <div class="overflow-hidden py-5">
+    <ul class="marquee-track flex w-max items-center">
+      {
+        [0, 1].map((copy) =>
+          names.map((name) => (
+            <li class="flex items-center" aria-hidden={copy === 1 ? 'true' : undefined}>
+              <span class="whitespace-nowrap px-6 font-display text-2xl font-bold [font-stretch:85%] sm:text-3xl">{name}</span>
+              <Icon name="umbrella-simple-fill" size={18} class="shrink-0 text-ndc-red" />
+            </li>
+          )),
+        )
+      }
+    </ul>
+  </div>
+  <Kente variant={3} offset={50} class="h-2.5" />
+</section>
+
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      width: auto;
+      flex-wrap: wrap;
+      justify-content: center;
+      row-gap: 0.5rem;
+    }
+    .marquee-track li[aria-hidden='true'] {
+      display: none;
+    }
+  }
+</style>

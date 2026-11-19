@@ -1,0 +1,25 @@
+---
+import { site } from '../data/site';
+import Icon from './Icon.astro';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<a href="/" class={`group inline-flex items-center gap-2.5 ${className}`} aria-label={`${site.name}, home`}>
+  {
+    site.logo ? (
+      <img src={site.logo} alt="" width="40" height="40" class="size-10 object-contain" />
+    ) : (
+      <span class="grid size-10 place-items-center rounded-full bg-ndc-red text-white ring-2 ring-ndc-green ring-offset-2 ring-offset-paper transition-transform duration-300 group-hover:-rotate-6">
+        <Icon name="umbrella-fill" size={22} />
+      </span>
+    )
+  }
+  <span class="font-display text-[1.2rem] leading-none tracking-tight [font-stretch:85%]">
+    <span class="font-extrabold">NDC</span>{' '}<span class="font-medium text-ink-2">Oforikrom</span>
+  </span>
+</a>

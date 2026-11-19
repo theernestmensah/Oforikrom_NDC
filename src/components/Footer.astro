@@ -1,0 +1,142 @@
+---
+import { site, whatsappLink } from '../data/site';
+import Icon from './Icon.astro';
+import Kente from './Kente.astro';
+import Logo from './Logo.astro';
+
+const year = new Date().getFullYear();
+const wa = whatsappLink();
+
+const socials = [
+  { href: site.socials.facebook, label: 'Facebook', icon: 'facebook-logo' },
+  { href: site.socials.x, label: 'X', icon: 'x-logo' },
+  { href: site.socials.instagram, label: 'Instagram', icon: 'instagram-logo' },
+  { href: site.socials.tiktok, label: 'TikTok', icon: 'tiktok-logo' },
+  { href: site.socials.youtube, label: 'YouTube', icon: 'youtube-logo' },
+  { href: site.socials.whatsappChannel, label: 'WhatsApp Channel', icon: 'whatsapp-logo' },
+].filter((s) => s.href);
+
+const columns = [
+  {
+    title: 'The party',
+    links: [
+      { label: 'About Oforikrom', href: '/about' },
+      { label: 'Leadership', href: '/leadership' },
+      { label: 'News', href: '/news' },
+      { label: 'Events', href: '/events' },
+    ],
+  },
+  {
+    title: 'Get involved',
+    links: [
+      { label: 'Join the party', href: '/get-involved#join' },
+      { label: 'Volunteer', href: '/get-involved#volunteer' },
+      { label: 'TEIN and Youth', href: '/get-involved#tein' },
+      { label: 'Find your branch', href: '/#branches' },
+    ],
+  },
+];
+---
+
+<footer class="mt-auto border-t border-line bg-paper-2">
+  <Kente variant={1} class="h-3" />
+  <div class="wrap grid gap-12 py-14 lg:grid-cols-12 lg:py-20">
+    <div class="lg:col-span-5">
+      <Logo />
+      <p class="mt-5 max-w-sm text-ink-2">
+        The National Democratic Congress in Oforikrom Constituency, Kumasi. Organising all 15 electoral areas, from Anloga to Anwomaso.
+      </p>
+      <p class="mt-5 font-display text-lg font-bold [font-stretch:88%]">{site.motto}</p>
+      {
+        socials.length > 0 && (
+          <ul class="mt-6 flex flex-wrap gap-2" aria-label="Social media">
+            {socials.map((s) => (
+              <li>
+                <a
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener"
+                  class="grid size-11 place-items-center rounded-full border border-line-strong text-ink-2 transition-colors hover:border-ink hover:text-ink"
+                  aria-label={s.label}
+                >
+                  <Icon name={s.icon} size={20} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+
+    <div class="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:col-span-7">
+      {
+        columns.map((col) => (
+          <div>
+            <h2 class="font-sans text-sm font-semibold tracking-normal text-muted">{col.title}</h2>
+            <ul class="mt-4 space-y-3">
+              {col.links.map((l) => (
+                <li>
+                  <a href={l.href} class="font-medium text-ink hover:text-accent-text">
+                    {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+      <div class="col-span-2 sm:col-span-1">
+        <h2 class="font-sans text-sm font-semibold tracking-normal text-muted">Contact</h2>
+        <ul class="mt-4 space-y-3 text-ink">
+          {
+            site.contact.office && (
+              <li class="flex gap-2.5">
+                <Icon name="map-pin" class="mt-1 shrink-0 text-muted" />
+                <span>{site.contact.office}</span>
+              </li>
+            )
+          }
+          {
+            site.contact.phone && (
+              <li class="flex gap-2.5">
+                <Icon name="phone" class="mt-1 shrink-0 text-muted" />
+                <a href={`tel:${site.contact.phone.replace(/\s/g, '')}`} class="hover:text-accent-text">
+                  {site.contact.phone}
+                </a>
+              </li>
+            )
+          }
+          {
+            wa && (
+              <li class="flex gap-2.5">
+                <Icon name="whatsapp-logo" class="mt-1 shrink-0 text-muted" />
+                <a href={wa} target="_blank" rel="noopener" class="hover:text-accent-text">
+                  WhatsApp us
+                </a>
+              </li>
+            )
+          }
+          {
+            site.contact.email && (
+              <li class="flex gap-2.5">
+                <Icon name="envelope-simple" class="mt-1 shrink-0 text-muted" />
+                <a href={`mailto:${site.contact.email}`} class="break-all hover:text-accent-text">
+                  {site.contact.email}
+                </a>
+              </li>
+            )
+          }
+          <li>
+            <a href="/contact" class="arrow-link">
+              Contact us <Icon name="arrow-right" size={16} />
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrap flex flex-col gap-2 border-t border-line py-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
+    <p>&copy; {year} National Democratic Congress, Oforikrom Constituency.</p>
+    <p>Kumasi, Ashanti Region, Ghana</p>
+  </div>
+</footer>

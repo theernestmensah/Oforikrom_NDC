@@ -1,0 +1,32 @@
+---
+/**
+ * A Kente-inspired woven strip. Use direction "x" for horizontal bands
+ * (set a height) and "y" for vertical strips (set a width).
+ */
+import { kente, type KenteDirection } from '../lib/kente';
+
+interface Props {
+  variant?: number;
+  direction?: KenteDirection;
+  /** Shifts the pattern along the strip, in percent of one repeat. */
+  offset?: number;
+  class?: string;
+  style?: string;
+  /** Use "span" inside text elements such as <p>. */
+  as?: 'div' | 'span';
+}
+
+const { variant = 0, direction = 'x', offset = 0, class: className = '', style = '', as: Tag = 'div' } = Astro.props;
+const { url } = kente(variant, direction);
+const position = direction === 'x' ? `${offset}% 0` : `0 ${offset}%`;
+const size = direction === 'x' ? 'auto 100%' : '100% auto';
+const repeat = direction === 'x' ? 'repeat-x' : 'repeat-y';
+---
+
+<Tag
+  aria-hidden="true"
+  class={`${Tag === 'span' ? 'inline-block ' : ''}${className}`}
+  style={`background-image:${url};background-size:${size};background-repeat:${repeat};background-position:${position};${style}`}
+>
+  <slot />
+</Tag>

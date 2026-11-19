@@ -1,0 +1,42 @@
+---
+import Kente from './Kente.astro';
+
+interface Props {
+  title: string;
+  intro?: string;
+  crumb?: string;
+  variant?: number;
+}
+
+const { title, intro, crumb, variant = 0 } = Astro.props;
+---
+
+<section class="relative overflow-hidden border-b border-line">
+  <div class="wrap relative grid gap-8 pb-14 pt-10 lg:grid-cols-12 lg:pb-20 lg:pt-16">
+    <div class="lg:col-span-9">
+      {
+        crumb && (
+          <nav aria-label="Breadcrumb" class="rise mb-6 text-sm text-muted">
+            <a href="/" class="hover:text-ink">
+              Home
+            </a>
+            <span class="mx-2" aria-hidden="true">
+              /
+            </span>
+            <span aria-current="page" class="text-ink-2">
+              {crumb}
+            </span>
+          </nav>
+        )
+      }
+      <h1 class="rise display-xl max-w-[16ch]" style="--d:1">{title}</h1>
+      {intro && <p class="rise mt-6 max-w-[58ch] text-lg text-ink-2 sm:text-xl" style="--d:2">{intro}</p>}
+      <slot />
+    </div>
+  </div>
+  <div class="pointer-events-none absolute inset-y-0 right-0 hidden w-[22%] max-w-80 lg:flex" aria-hidden="true">
+    <Kente variant={variant} direction="y" class="weave-strip h-full flex-1" style="--i:0" />
+    <Kente variant={variant + 1} direction="y" offset={35} class="weave-strip h-full flex-1" style="--i:1" />
+    <Kente variant={variant + 2} direction="y" offset={65} class="weave-strip h-full flex-1" style="--i:2" />
+  </div>
+</section>

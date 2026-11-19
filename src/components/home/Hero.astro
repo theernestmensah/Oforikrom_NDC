@@ -1,0 +1,66 @@
+---
+import { site } from '../../data/site';
+import Icon from '../Icon.astro';
+import Kente from '../Kente.astro';
+
+const strips = [
+  { variant: 0, offset: 0 },
+  { variant: 1, offset: 30 },
+  { variant: 2, offset: 62 },
+  { variant: 3, offset: 15 },
+  { variant: 0, offset: 48 },
+  { variant: 2, offset: 80 },
+];
+---
+
+<section class="relative overflow-hidden">
+  <div class="wrap grid items-center gap-10 pb-12 pt-10 sm:pt-14 lg:grid-cols-12 lg:gap-12 lg:pb-20 lg:pt-16">
+    <div class="lg:col-span-7">
+      <p class="rise eyebrow">
+        <Kente as="span" variant={0} class="h-4 w-8 rounded-[3px]" />
+        Oforikrom Constituency, Ashanti Region
+      </p>
+      <h1 class="rise display-xl mt-6 max-w-[17ch]" style="--d:1">
+        <span class="text-accent-text">One umbrella,</span> from Anloga to Anwomaso.
+      </h1>
+      <p class="rise mt-6 max-w-[46ch] text-lg leading-relaxed text-ink-2 sm:text-xl" style="--d:2">
+        The NDC in Oforikrom: organising all 15 electoral areas, backing the Reset agenda, and building to win in 2028.
+      </p>
+      <div class="rise mt-9 flex flex-wrap gap-3" style="--d:3">
+        <a href="/get-involved#join" class="btn btn-primary">
+          Join the party <Icon name="arrow-right" class="btn-arrow" />
+        </a>
+        <a href="#branches" class="btn btn-outline">
+          <Icon name="map-pin" /> Find your branch
+        </a>
+      </div>
+    </div>
+
+    <div class="lg:col-span-5">
+      <div
+        class="relative aspect-square overflow-hidden rounded-box bg-ndc-black shadow-[0_30px_80px_-30px_hsl(var(--shadow-tint)/0.55)] sm:aspect-[16/11] lg:aspect-[4/5]"
+      >
+        <div class="absolute inset-0 flex" aria-hidden="true">
+          {strips.map((s, i) => <Kente variant={s.variant} direction="y" offset={s.offset} class="weave-strip h-full flex-1" style={`--i:${i}`} />)}
+        </div>
+
+        {
+          site.photos.hero ? (
+            <div class="pop-in absolute inset-[9%] bottom-[24%] overflow-hidden rounded-[0.9rem] ring-4 ring-ndc-white">
+              <img src={site.photos.hero} alt="NDC supporters in Oforikrom" class="h-full w-full object-cover" fetchpriority="high" />
+            </div>
+          ) : (
+            <div class="pop-in absolute left-1/2 top-[32%] grid aspect-square h-[40%] -translate-x-1/2 sm:top-[38%] sm:h-[46%] -translate-y-1/2 place-items-center rounded-full bg-ndc-white shadow-2xl ring-[6px] ring-ndc-black/80">
+              <Icon name="umbrella-fill" class="h-[58%] w-[58%] text-ndc-red" />
+            </div>
+          )
+        }
+
+        <div class="pop-in absolute inset-x-4 bottom-4 rounded-[0.9rem] bg-paper/95 p-4 backdrop-blur sm:inset-x-5 sm:bottom-5 sm:p-5">
+          <p class="font-display text-[1.35rem] font-bold leading-tight [font-stretch:86%] sm:text-2xl">{site.motto}</p>
+          <p class="mt-1 text-sm text-muted">The motto of the National Democratic Congress since 1992</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

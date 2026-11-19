@@ -1,0 +1,154 @@
+---
+import { areas, zoneName, zones } from '../data/areas';
+import { whatsappLink } from '../data/site';
+import Icon from './Icon.astro';
+
+interface Props {
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { headingLevel: Heading = 'h2' } = Astro.props;
+
+const searchText = (a: (typeof areas)[number]) => [a.name, ...a.communities, ...(a.aliases ?? []), zoneName(a.zone)].join(' ').toLowerCase();
+const officeLink = (areaName: string) => whatsappLink(`Hello NDC Oforikrom, I live in ${areaName} and would like to connect with my branch.`);
+---
+
+<section id="branches" class="wrap scroll-mt-24 py-20 lg:py-28" data-branch-finder>
+  <div class="grid gap-8 lg:grid-cols-12 lg:items-end">
+    <div class="lg:col-span-6" data-reveal>
+      <Heading class="display-lg">Find your branch.</Heading>
+      <p class="mt-5 max-w-[48ch] text-lg text-ink-2">
+        Oforikrom has 15 electoral areas in four zonal councils. Type your community to see where you belong.
+      </p>
+    </div>
+    <div class="lg:col-span-6" data-reveal style="--d:1">
+      <label for="branch-search" class="field-label">Your community</label>
+      <div class="relative mt-2">
+        <Icon name="magnifying-glass" size={20} class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
+        <input
+          id="branch-search"
+          type="search"
+          class="field min-h-[3.5rem] rounded-full pl-12 text-lg"
+          placeholder="For example Kotei, Bomso or KNUST"
+          autocomplete="off"
+          data-branch-search
+          aria-describedby="branch-count"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="js-only mt-8 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none]" role="group" aria-label="Filter by zonal council">
+    <button type="button" class="zone-pill" aria-pressed="true" data-zone-filter="all">All areas</button>
+    {
+      zones.map((z) => (
+        <button type="button" class="zone-pill" aria-pressed="false" data-zone-filter={z.id}>
+          {z.name}
+        </button>
+      ))
+    }
+  </div>
+  <p id="branch-count" class="sr-only" aria-live="polite" data-branch-count></p>
+
+  <ul class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      areas.map((area) => {
+        const contact = area.contact ? `https://wa.me/${area.contact}` : officeLink(area.name);
+        // Only list communities that the area's name doesn't already spell out.
+        const extra = area.communities.filter((c) => !area.name.includes(c));
+        return (
+          <li data-area data-zone={area.zone} data-search={searchText(area)} class="group flex flex-col rounded-box border border-line bg-card p-5 transition-colors hover:border-line-strong sm:p-6">
+            <p class="text-sm font-medium text-muted">{zoneName(area.zone)} zonal council</p>
+            <h3 class="mt-1.5 text-[1.4rem] font-bold leading-tight">{area.name}</h3>
+            {extra.length > 0 && (
+              <ul class="mt-3 flex flex-wrap gap-1.5" aria-label="Communities">
+                {extra.map((c) => (
+                  <li class="rounded-full bg-paper-2 px-3 py-1 text-sm text-ink-2">{c}</li>
+                ))}
+              </ul>
+            )}
+            <div class="mt-auto pt-4 sm:pt-6">
+              {area.coordinator && <p class="mb-2 text-sm text-ink-2">Coordinator: {area.coordinator}</p>}
+              {contact ? (
+                <a href={contact} target="_blank" rel="noopener" class="arrow-link text-[0.9375rem]">
+                  <Icon name="whatsapp-logo" size={18} class="text-go-text" /> Connect with this branch
+                </a>
+              ) : (
+                <a href={`/contact?area=${area.id}`} class="arrow-link text-[0.9375rem]">
+                  Ask the constituency office <Icon name="arrow-right" size={16} />
+                </a>
+              )}
+            </div>
+          </li>
+        );
+      })
+    }
+  </ul>
+
+  <div hidden data-branch-empty class="mt-6 rounded-box border border-dashed border-line-strong p-10 text-center">
+    <Icon name="map-trifold" size={40} class="mx-auto text-muted" />
+    <p class="mt-4 text-xl font-semibold">No area matches "<span data-branch-term></span>".</p>
+    <p class="mx-auto mt-2 max-w-[44ch] text-ink-2">Try the name of a nearby community or landmark, or ask us and we will point you to the right branch.</p>
+    <a href="/contact" class="btn btn-outline mt-6">Contact us</a>
+  </div>
+</section>
+
+<style>
+  .zone-pill {
+    flex: none;
+    border-radius: 999px;
+    border: 1.5px solid var(--line-strong);
+    padding: 0.55rem 1.1rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--ink-2);
+    white-space: nowrap;
+    transition:
+      background-color 0.2s,
+      color 0.2s,
+      border-color 0.2s;
+  }
+  .zone-pill:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+  .zone-pill[aria-pressed='true'] {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-branch-finder]').forEach((root) => {
+    const input = root.querySelector<HTMLInputElement>('[data-branch-search]');
+    const pills = [...root.querySelectorAll<HTMLButtonElement>('[data-zone-filter]')];
+    const cards = [...root.querySelectorAll<HTMLElement>('[data-area]')];
+    const empty = root.querySelector<HTMLElement>('[data-branch-empty]');
+    const termEl = root.querySelector<HTMLElement>('[data-branch-term]');
+    const countEl = root.querySelector<HTMLElement>('[data-branch-count]');
+    let zone = 'all';
+
+    function apply() {
+      const term = (input?.value ?? '').trim().toLowerCase();
+      let shown = 0;
+      for (const card of cards) {
+        const match = (zone === 'all' || card.dataset.zone === zone) && (!term || (card.dataset.search ?? '').includes(term));
+        card.hidden = !match;
+        if (match) shown++;
+      }
+      if (empty) empty.hidden = shown > 0;
+      if (termEl) termEl.textContent = input?.value.trim() ?? '';
+      if (countEl) countEl.textContent = `${shown} electoral ${shown === 1 ? 'area' : 'areas'} shown`;
+    }
+
+    input?.addEventListener('input', apply);
+    pills.forEach((pill) =>
+      pill.addEventListener('click', () => {
+        zone = pill.dataset.zoneFilter ?? 'all';
+        pills.forEach((p) => p.setAttribute('aria-pressed', String(p === pill)));
+        apply();
+      }),
+    );
+  });
+</script>

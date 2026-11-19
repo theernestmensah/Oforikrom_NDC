@@ -1,0 +1,53 @@
+---
+import { site } from '../../data/site';
+import Icon from '../Icon.astro';
+import Kente from '../Kente.astro';
+import Photo from '../Photo.astro';
+
+const ways = [
+  { icon: 'student', title: 'Campus organising', text: 'Join TEIN-KNUST and help run membership drives, debates and outreach on campus.' },
+  { icon: 'identification-card', title: 'Polling agent training', text: 'Learn how to protect the vote at a polling station near you.' },
+  { icon: 'megaphone', title: 'Youth Wing', text: 'Work with the constituency Youth Organiser on community projects and campaigns.' },
+];
+---
+
+<section class="wrap py-20 lg:py-28">
+  <div class="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+    <div class="relative lg:col-span-5" data-reveal>
+      <Kente variant={2} direction="y" class="absolute -left-3 top-10 bottom-10 w-6 rounded-sm sm:-left-5 sm:w-8" />
+      <Photo
+        src={site.photos.youth}
+        alt="Young NDC members in Oforikrom"
+        hint="students or Youth Wing members at KNUST (portrait, 4:5)"
+        tone="green"
+        variant={1}
+        class="aspect-[4/5] rounded-box"
+      />
+    </div>
+    <div class="lg:col-span-7">
+      <div data-reveal>
+        <h2 class="display-lg max-w-[18ch]">KNUST is in Oforikrom. So is the next generation of the party.</h2>
+        <p class="mt-5 max-w-[52ch] text-lg text-ink-2">
+          One of Ghana's largest universities sits inside our constituency. TEIN-KNUST and the Youth Wing give students and young workers a real say in
+          the party.
+        </p>
+      </div>
+      <ul class="mt-10 grid gap-x-8 gap-y-7 sm:grid-cols-3">
+        {
+          ways.map((w, i) => (
+            <li data-reveal style={`--d:${i + 1}`}>
+              <span class="grid size-11 place-items-center rounded-full bg-go-soft text-go-text">
+                <Icon name={w.icon} size={22} />
+              </span>
+              <h3 class="mt-4 font-sans text-lg font-bold tracking-normal">{w.title}</h3>
+              <p class="mt-1.5 text-[0.98rem] text-ink-2">{w.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <a href="/get-involved#tein" class="btn btn-outline mt-10" data-reveal>
+        Connect with TEIN <Icon name="arrow-right" class="btn-arrow" />
+      </a>
+    </div>
+  </div>
+</section>

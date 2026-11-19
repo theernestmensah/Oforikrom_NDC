@@ -1,0 +1,152 @@
+---
+import Icon from '../components/Icon.astro';
+import JoinCta from '../components/JoinCta.astro';
+import Kente from '../components/Kente.astro';
+import PageHero from '../components/PageHero.astro';
+import { areas, zones } from '../data/areas';
+import { site } from '../data/site';
+import Base from '../layouts/Base.astro';
+
+const facts = [
+  { term: 'Region', value: 'Ashanti' },
+  { term: 'Municipality', value: 'Oforikrom Municipal Assembly, created in 2018 (LI 2291)' },
+  { term: 'Electoral areas', value: '15, in four zonal councils' },
+  { term: 'University', value: 'Kwame Nkrumah University of Science and Technology (KNUST)' },
+  { term: 'Municipal Chief Executive', value: 'Hon. Ahmed Anwel Sadat' },
+];
+
+const pillars = [
+  { word: 'Unity', text: 'One umbrella over every community, faith and ethnic group in Oforikrom. We organise together and we win together.' },
+  { word: 'Stability', text: 'Steady, accountable government that people can plan their lives and businesses around.' },
+  { word: 'Development', text: 'Jobs, roads, schools and health care that reach every electoral area, not just a few.' },
+];
+---
+
+<Base title="About" description="About Oforikrom Constituency in Kumasi and the National Democratic Congress that organises across its 15 electoral areas.">
+  <PageHero
+    crumb="About"
+    title="Oforikrom, and the party that serves it."
+    intro="A young, busy constituency on the eastern side of Kumasi, home to KNUST, and an NDC that organises in every corner of it."
+    variant={2}
+  />
+
+  <section class="wrap py-16 lg:py-24">
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+      <div class="lg:col-span-7" data-reveal>
+        <h2 class="display-lg">The constituency</h2>
+        <div class="prose-ndc mt-6 max-w-[62ch]">
+          <p>
+            Oforikrom sits on the eastern side of Kumasi. It runs from Anloga and Oforikrom town, through Bomso, Ayigya and the KNUST campus, out to
+            Kentinkrono, Ayeduase and Anwomaso on the road towards Accra.
+          </p>
+          <p>
+            It is one of the most varied constituencies in the Ashanti Region. Long-established neighbourhoods and markets sit beside one of Ghana's
+            biggest universities, student hostels, and fast-growing new settlements on the city's edge. Traders, artisans, civil servants, lecturers
+            and students all call it home.
+          </p>
+          <p>
+            Local government here is the Oforikrom Municipal Assembly, which was carved out of the Kumasi Metropolitan Assembly and inaugurated in
+            March 2018.
+          </p>
+        </div>
+      </div>
+      <aside class="lg:col-span-5" data-reveal style="--d:1">
+        <dl class="overflow-hidden rounded-box border border-line bg-card">
+          <Kente variant={0} class="h-3" />
+          <div class="divide-y divide-line px-7">
+            {
+              facts.map((f) => (
+                <div class="grid gap-1 py-5">
+                  <dt class="text-sm font-medium text-muted">{f.term}</dt>
+                  <dd class="text-lg font-semibold leading-snug">{f.value}</dd>
+                </div>
+              ))
+            }
+          </div>
+        </dl>
+      </aside>
+    </div>
+  </section>
+
+  <section class="border-y border-line bg-paper-2 py-16 lg:py-24">
+    <div class="wrap">
+      <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between" data-reveal>
+        <h2 class="display-lg max-w-[18ch]">Four zonal councils, fifteen electoral areas.</h2>
+        <a href="/#branches" class="arrow-link shrink-0">Find your branch <Icon name="arrow-right" size={18} /></a>
+      </div>
+      <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          zones.map((z, i) => {
+            const list = areas.filter((a) => a.zone === z.id);
+            return (
+              <article class="overflow-hidden rounded-box border border-line bg-card" data-reveal style={`--d:${i}`}>
+                <Kente variant={i} class="h-3" />
+                <div class="p-6">
+                  <p class="font-display text-5xl font-extrabold [font-stretch:82%]">{list.length}</p>
+                  <h3 class="mt-1 text-xl font-bold">{z.name}</h3>
+                  <ul class="mt-4 space-y-2 text-[0.98rem] text-ink-2">
+                    {list.map((a) => (
+                      <li>{a.name}</li>
+                    ))}
+                  </ul>
+                </div>
+              </article>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap py-16 lg:py-24">
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+      <div class="lg:col-span-5" data-reveal>
+        <p class="eyebrow">The National Democratic Congress</p>
+        <h2 class="display-lg mt-4">A social democratic party, founded in 1992.</h2>
+        <p class="mt-5 max-w-[46ch] text-lg text-ink-2">
+          The NDC was founded by Flt. Lt. Jerry John Rawlings at the start of the Fourth Republic. Since January 2025 it has formed the government
+          under President John Dramani Mahama and Vice President Professor Jane Naana Opoku-Agyemang.
+        </p>
+      </div>
+      <ol class="lg:col-span-7">
+        {
+          pillars.map((p, i) => (
+            <li class="grid gap-2 border-t-2 border-ink py-7 sm:grid-cols-[13rem_1fr] sm:gap-8" data-reveal style={`--d:${i + 1}`}>
+              <p class="font-display text-4xl font-extrabold text-accent-text [font-stretch:82%] sm:text-5xl">{p.word}</p>
+              <p class="text-lg text-ink-2 sm:pt-2">{p.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="border-t border-line bg-paper-2 py-16 lg:py-24">
+    <div class="wrap grid gap-10 lg:grid-cols-12">
+      <div class="lg:col-span-5" data-reveal>
+        <h2 class="display-md">What the constituency party does</h2>
+        <p class="mt-4 max-w-[44ch] text-ink-2">
+          Between elections, the work is steady and local. These are the jobs the constituency executive and branches share.
+        </p>
+      </div>
+      <ul class="grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:col-span-7">
+        {
+          [
+            { icon: 'users-three', title: 'Build the branches', text: 'Recruit members, elect branch executives and keep every polling station organised.' },
+            { icon: 'chat-circle-text', title: 'Listen to residents', text: 'Gather concerns from each community and carry them to the Assembly and to government.' },
+            { icon: 'handshake', title: 'Connect people to programmes', text: 'Help residents, traders and students benefit from national programmes like No-Fees-Stress.' },
+            { icon: 'identification-card', title: 'Protect the vote', text: 'Train polling agents and make sure every election in Oforikrom is free, fair and properly counted.' },
+          ].map((item, i) => (
+            <li data-reveal style={`--d:${i}`}>
+              <Icon name={item.icon} size={30} class="text-accent-text" />
+              <h3 class="mt-3 font-sans text-lg font-bold tracking-normal">{item.title}</h3>
+              <p class="mt-1 text-ink-2">{item.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <JoinCta title={`${site.motto}.`} text="Add your name to the NDC in Oforikrom and help build the branches that win elections." />
+</Base>

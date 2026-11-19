@@ -1,0 +1,33 @@
+---
+import { initials } from '../data/leaders';
+import Icon from './Icon.astro';
+import Kente from './Kente.astro';
+
+interface Props {
+  name: string;
+  photo?: string;
+  variant?: number;
+  class?: string;
+}
+
+const { name, photo, variant = 0, class: className = '' } = Astro.props;
+---
+
+<div class={`relative overflow-hidden bg-paper-2 ${className}`}>
+  {
+    photo ? (
+      <img src={photo} alt={name} class="absolute inset-0 h-full w-full object-cover" loading="lazy" decoding="async" />
+    ) : (
+      <>
+        <Kente variant={variant} direction="y" class="absolute inset-y-0 left-0 w-[18%]" />
+        <div class="absolute inset-0 grid place-items-center pl-[18%]">
+          {name ? (
+            <span class="font-display text-[clamp(2.5rem,6vw,4rem)] font-extrabold tracking-tight text-ink-2/70 [font-stretch:82%]">{initials(name)}</span>
+          ) : (
+            <Icon name="umbrella-simple-fill" class="h-[34%] w-[34%] text-line-strong" />
+          )}
+        </div>
+      </>
+    )
+  }
+</div>

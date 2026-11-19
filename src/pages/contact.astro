@@ -1,0 +1,117 @@
+---
+import Icon from '../components/Icon.astro';
+import PageHero from '../components/PageHero.astro';
+import ContactForm from '../components/form/ContactForm.astro';
+import { site, whatsappLink } from '../data/site';
+import Base from '../layouts/Base.astro';
+
+const wa = whatsappLink('Hello NDC Oforikrom, ');
+const methods = [
+  wa && { icon: 'whatsapp-logo', label: 'WhatsApp', value: 'Chat with the constituency office', href: wa, external: true },
+  site.contact.phone && { icon: 'phone', label: 'Phone', value: site.contact.phone, href: `tel:${site.contact.phone.replace(/\s/g, '')}` },
+  site.contact.email && { icon: 'envelope-simple', label: 'Email', value: site.contact.email, href: `mailto:${site.contact.email}` },
+  site.contact.office && {
+    icon: 'map-pin',
+    label: 'Constituency office',
+    value: site.contact.office + (site.contact.officeHours ? `. ${site.contact.officeHours}` : ''),
+    href: site.contact.officeMapUrl || undefined,
+    external: true,
+  },
+].filter(Boolean) as { icon: string; label: string; value: string; href?: string; external?: boolean }[];
+
+const faqs = [
+  {
+    q: 'How do I find my branch executives?',
+    a: 'Use the branch finder on the home page to find your electoral area, then send us a message. We will put you in touch with the executives for your polling station.',
+  },
+  {
+    q: 'I am a KNUST student. Can I join here?',
+    a: 'Yes. Students can join TEIN-KNUST, the party’s student wing on campus, and take part in the constituency’s work. Tick "Youth Wing or TEIN" on the sign-up form.',
+  },
+  {
+    q: 'How do I become a polling station agent?',
+    a: 'Sign up on the Get involved page and tick "Polling station agent". Agents are trained before every election, and training dates are posted on the Events page.',
+  },
+  {
+    q: 'Can the party help with a problem in my community?',
+    a: 'Tell us about it using the form on this page and choose "Raise a community issue". We will pass it on to the right people, including the Municipal Assembly where appropriate.',
+  },
+];
+---
+
+<Base title="Contact us" description="Contact the NDC Oforikrom constituency office by WhatsApp, phone or message.">
+  <PageHero crumb="Contact us" title="Contact us" intro="Questions, ideas, community issues or media enquiries. Send us a message and the constituency office will respond." variant={2} />
+
+  <section class="wrap py-16 lg:py-24">
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+      <div class="lg:col-span-5">
+        {
+          methods.length > 0 ? (
+            <ul class="grid gap-3">
+              {methods.map((m, i) => (
+                <li data-reveal style={`--d:${i}`}>
+                  {m.href ? (
+                    <a
+                      href={m.href}
+                      target={m.external ? '_blank' : undefined}
+                      rel={m.external ? 'noopener' : undefined}
+                      class="group flex items-start gap-4 rounded-box border border-line bg-card p-5 transition-colors hover:border-ink"
+                    >
+                      <span class="grid size-11 shrink-0 place-items-center rounded-full bg-paper-2 text-accent-text">
+                        <Icon name={m.icon} size={22} />
+                      </span>
+                      <span class="min-w-0 flex-1">
+                        <span class="block text-sm text-muted">{m.label}</span>
+                        <span class="block break-words font-semibold">{m.value}</span>
+                      </span>
+                      <Icon name="arrow-up-right" size={20} class="mt-1 text-muted transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                    </a>
+                  ) : (
+                    <div class="flex items-start gap-4 rounded-box border border-line bg-card p-5">
+                      <span class="grid size-11 shrink-0 place-items-center rounded-full bg-paper-2 text-accent-text">
+                        <Icon name={m.icon} size={22} />
+                      </span>
+                      <span>
+                        <span class="block text-sm text-muted">{m.label}</span>
+                        <span class="block font-semibold">{m.value}</span>
+                      </span>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div class="rounded-box border border-line bg-card p-7" data-reveal>
+              <Icon name="chat-circle-text" size={34} class="text-accent-text" />
+              <p class="mt-4 text-lg font-semibold">Send us a message</p>
+              <p class="mt-2 text-ink-2">Use the form and the constituency office will get back to you. Office phone and WhatsApp details will be listed here.</p>
+            </div>
+          )
+        }
+
+        <h2 class="display-md mt-16" data-reveal>Common questions</h2>
+        <div class="mt-6 divide-y divide-line border-y border-line">
+          {
+            faqs.map((f) => (
+              <details class="group py-5" data-reveal>
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-lg font-semibold [&::-webkit-details-marker]:hidden">
+                  {f.q}
+                  <Icon name="plus" size={20} class="shrink-0 text-muted transition-transform duration-300 group-open:rotate-45" />
+                </summary>
+                <p class="mt-3 text-ink-2">{f.a}</p>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="lg:col-span-7">
+        <div class="rounded-box border border-line bg-card p-6 shadow-[0_24px_60px_-36px_hsl(var(--shadow-tint)/0.5)] sm:p-10" data-reveal style="--d:1">
+          <h2 class="text-2xl font-bold">Send a message</h2>
+          <p class="mb-8 mt-2 text-ink-2">We read every message.</p>
+          <ContactForm />
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

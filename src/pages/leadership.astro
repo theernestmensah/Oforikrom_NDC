@@ -1,0 +1,96 @@
+---
+import Icon from '../components/Icon.astro';
+import PageHero from '../components/PageHero.astro';
+import Portrait from '../components/Portrait.astro';
+import { executives, featuredLeaders, government } from '../data/leaders';
+import Base from '../layouts/Base.astro';
+
+const tel = (phone: string) => `tel:${phone.replace(/\s/g, '')}`;
+---
+
+<Base title="Leadership" description="The constituency executives of the NDC in Oforikrom, and the government appointees serving the municipality.">
+  <PageHero
+    crumb="Leadership"
+    title="The people who organise Oforikrom."
+    intro="Constituency executives are elected by party delegates to serve the branches. Profiles are being updated following the 2026 party elections."
+    variant={1}
+  />
+
+  <section class="wrap py-16 lg:py-24">
+    <div class="grid gap-6 lg:grid-cols-2">
+      {
+        featuredLeaders.map((l, i) => (
+          <article class="grid overflow-hidden rounded-box border border-line bg-card sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]" data-reveal style={`--d:${i}`}>
+            <Portrait name={l.name} photo={l.photo} variant={i} class="aspect-[4/3] sm:aspect-auto sm:min-h-72" />
+            <div class="flex flex-col p-7 sm:p-8">
+              <p class="text-sm font-semibold text-accent-text">{l.role}</p>
+              <h2 class="mt-2 text-3xl font-bold">{l.name || 'Profile coming soon'}</h2>
+              {l.bio && <p class="mt-3 text-ink-2">{l.bio}</p>}
+              {l.phone && (
+                <a href={tel(l.phone)} class="arrow-link mt-auto pt-6">
+                  <Icon name="phone" size={18} /> {l.phone}
+                </a>
+              )}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <h2 class="display-md mt-20" data-reveal>Constituency executive committee</h2>
+    <ul class="mt-8 grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-3">
+      {
+        executives.map((l, i) => (
+          <li data-reveal style={`--d:${i % 3}`}>
+            <Portrait name={l.name} photo={l.photo} variant={i + 2} class="aspect-square rounded-box md:aspect-[4/3]" />
+            <p class="mt-4 text-sm font-semibold text-accent-text">{l.role}</p>
+            <p class={`mt-1 text-lg font-bold leading-snug ${l.name ? '' : 'text-muted'}`}>{l.name || 'Profile coming soon'}</p>
+            {l.phone && (
+              <a href={tel(l.phone)} class="mt-1 inline-block text-sm text-ink-2 hover:text-accent-text">
+                {l.phone}
+              </a>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="border-y border-line bg-paper-2 py-16 lg:py-24">
+    <div class="wrap grid gap-10 lg:grid-cols-12 lg:items-center">
+      <div class="lg:col-span-5" data-reveal>
+        <h2 class="display-lg">Our government in Oforikrom.</h2>
+        <p class="mt-5 max-w-[46ch] text-lg text-ink-2">
+          Since January 2025, the NDC has been in government under President John Dramani Mahama. Locally, the Municipal Chief Executive leads the
+          Oforikrom Municipal Assembly.
+        </p>
+      </div>
+      <div class="lg:col-span-6 lg:col-start-7">
+        {
+          government.map((l) => (
+            <article class="flex items-center gap-6 rounded-box border border-line bg-card p-6 sm:p-8" data-reveal style="--d:1">
+              <Portrait name={l.name} photo={l.photo} variant={3} class="size-24 shrink-0 rounded-full sm:size-28" />
+              <div>
+                <p class="text-sm font-semibold text-accent-text">{l.role}</p>
+                <h3 class="mt-1 text-2xl font-bold">{l.name}</h3>
+                {l.bio && <p class="mt-2 text-ink-2">{l.bio}</p>}
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap py-16 lg:py-24">
+    <div class="flex flex-col items-start justify-between gap-6 rounded-box border border-line p-8 sm:p-10 md:flex-row md:items-center" data-reveal>
+      <div>
+        <h2 class="text-2xl font-bold sm:text-3xl">Looking for your branch executives?</h2>
+        <p class="mt-2 max-w-[52ch] text-ink-2">Every polling station has its own branch. Find your electoral area and we'll connect you.</p>
+      </div>
+      <a href="/#branches" class="btn btn-primary shrink-0">
+        <Icon name="map-pin" /> Find your branch
+      </a>
+    </div>
+  </section>
+</Base>

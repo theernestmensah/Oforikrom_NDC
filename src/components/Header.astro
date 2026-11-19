@@ -1,0 +1,147 @@
+---
+import { nav, site, whatsappLink } from '../data/site';
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
+const wa = whatsappLink();
+---
+
+<header class="sticky top-0 z-40 border-b border-line bg-paper/90 backdrop-blur-md">
+  <div class="wrap flex h-[4.25rem] items-center justify-between gap-4">
+    <Logo />
+
+    <nav aria-label="Main" class="hidden lg:block">
+      <ul class="flex items-center gap-0.5">
+        {
+          nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                aria-current={isActive(item.href) ? 'page' : undefined}
+                class="relative rounded-full px-3.5 py-2 text-[0.9375rem] font-medium text-ink-2 transition-colors hover:bg-paper-2 hover:text-ink aria-[current=page]:font-semibold aria-[current=page]:text-ink"
+              >
+                {item.label}
+                {isActive(item.href) && <span class="absolute inset-x-3.5 -bottom-[0.95rem] h-[3px] rounded-full bg-accent" />}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-1.5">
+      <button
+        type="button"
+        data-theme-toggle
+        class="js-only grid size-10 place-items-center rounded-full text-ink-2 transition-colors hover:bg-paper-2 hover:text-ink"
+        aria-label="Switch to dark theme"
+      >
+        <Icon name="moon" class="theme-moon" />
+        <Icon name="sun" class="theme-sun" />
+      </button>
+      <a href="/get-involved#join" class="btn btn-primary btn-sm hidden sm:inline-flex">Join the party</a>
+      <button
+        type="button"
+        data-menu-toggle
+        class="js-only grid size-10 place-items-center rounded-full text-ink transition-colors hover:bg-paper-2 lg:hidden"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Open menu"
+      >
+        <Icon name="list" size={24} class="menu-open-icon" />
+        <Icon name="x" size={24} class="menu-close-icon hidden" />
+      </button>
+    </div>
+  </div>
+
+  <div id="mobile-menu" hidden class="border-t border-line bg-paper lg:hidden">
+    <nav aria-label="Mobile" class="wrap max-h-[calc(100dvh-4.25rem)] overflow-y-auto pb-8 pt-4">
+      <ul class="divide-y divide-line">
+        <li>
+          <a href="/" class="flex items-center justify-between py-4 font-display text-2xl font-bold [font-stretch:88%]" aria-current={path === '/' ? 'page' : undefined}>
+            Home <Icon name="arrow-right" class="text-muted" />
+          </a>
+        </li>
+        {
+          nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                aria-current={isActive(item.href) ? 'page' : undefined}
+                class="flex items-center justify-between py-4 font-display text-2xl font-bold [font-stretch:88%] aria-[current=page]:text-accent-text"
+              >
+                {item.label} <Icon name="arrow-right" class="text-muted" />
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a href="/contact" class="flex items-center justify-between py-4 font-display text-2xl font-bold [font-stretch:88%]" aria-current={isActive('/contact') ? 'page' : undefined}>
+            Contact us <Icon name="arrow-right" class="text-muted" />
+          </a>
+        </li>
+      </ul>
+      <div class="mt-6 grid gap-3">
+        <a href="/get-involved#join" class="btn btn-primary w-full">Join the party <Icon name="arrow-right" class="btn-arrow" /></a>
+        {
+          wa && (
+            <a href={wa} class="btn btn-outline w-full" rel="noopener" target="_blank">
+              <Icon name="whatsapp-logo" /> Chat on WhatsApp
+            </a>
+          )
+        }
+      </div>
+      <p class="mt-6 text-sm text-muted">{site.motto}</p>
+    </nav>
+  </div>
+</header>
+
+<style is:global>
+  [data-theme='dark'] .theme-moon,
+  :root:not([data-theme='dark']) .theme-sun {
+    display: none;
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const menu = document.getElementById('mobile-menu');
+
+  function setMenu(open: boolean) {
+    if (!toggle || !menu) return;
+    menu.hidden = !open;
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    toggle.querySelector('.menu-open-icon')?.classList.toggle('hidden', open);
+    toggle.querySelector('.menu-close-icon')?.classList.toggle('hidden', !open);
+  }
+
+  toggle?.addEventListener('click', () => setMenu(Boolean(menu?.hidden)));
+  menu?.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('a')) setMenu(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menu && !menu.hidden) {
+      setMenu(false);
+      toggle?.focus();
+    }
+  });
+  matchMedia('(min-width: 1024px)').addEventListener('change', (e) => e.matches && setMenu(false));
+
+  const themeButton = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+  const syncThemeLabel = () => {
+    const dark = document.documentElement.dataset.theme === 'dark';
+    themeButton?.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+  };
+  syncThemeLabel();
+  themeButton?.addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    try {
+      localStorage.setItem('theme', next);
+    } catch {}
+    syncThemeLabel();
+  });
+</script>

@@ -1,0 +1,19 @@
+---
+import Icon from '../components/Icon.astro';
+import Kente from '../components/Kente.astro';
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Page not found" description="The page you were looking for could not be found.">
+  <section class="wrap grid min-h-[60dvh] items-center py-20">
+    <div class="max-w-2xl">
+      <Kente variant={1} class="rise h-4 w-24 rounded-sm" />
+      <h1 class="rise display-xl mt-8" style="--d:1">We couldn't find that page.</h1>
+      <p class="rise mt-6 text-xl text-ink-2" style="--d:2">It may have moved, or the link may be wrong. These will get you back on track.</p>
+      <div class="rise mt-9 flex flex-wrap gap-3" style="--d:3">
+        <a href="/" class="btn btn-primary">Go to the home page <Icon name="arrow-right" class="btn-arrow" /></a>
+        <a href="/#branches" class="btn btn-outline"><Icon name="map-pin" /> Find your branch</a>
+      </div>
+    </div>
+  </section>
+</Base>

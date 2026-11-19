@@ -1,0 +1,164 @@
+---
+import Icon from '../components/Icon.astro';
+import Kente from '../components/Kente.astro';
+import PageHero from '../components/PageHero.astro';
+import JoinForm from '../components/form/JoinForm.astro';
+import { site, whatsappLink } from '../data/site';
+import Base from '../layouts/Base.astro';
+
+const steps = [
+  { icon: 'chat-circle-text', title: 'Tell us about you', text: 'Fill in the form with your name, number and electoral area. It takes two minutes.' },
+  { icon: 'users-three', title: 'Meet your branch', text: 'The constituency secretariat passes your details to the executives of your branch, who will reach out.' },
+  { icon: 'identification-card', title: 'Register and get your card', text: 'Complete your membership registration at branch level and start taking part.' },
+];
+
+const roles = [
+  { icon: 'identification-card', title: 'Polling station agent', text: 'Represent the party at a polling station on election day, after training.' },
+  { icon: 'house-line', title: 'Door-to-door canvassing', text: 'Talk with neighbours about the NDC and what government is doing.' },
+  { icon: 'megaphone', title: 'Communications', text: 'Write, photograph, film and share the constituency story online.' },
+  { icon: 'calendar-blank', title: 'Events and logistics', text: 'Help plan and run rallies, forums and community events.' },
+  { icon: 'storefront', title: "Women's Wing", text: "Organise with the Women's Organiser and reach market women and mothers." },
+  { icon: 'mosque', title: 'Zongo Caucus', text: 'Strengthen the party in Ayigya Zongo and other Zongo communities.' },
+  { icon: 'scales', title: 'Professional skills', text: 'Offer legal, health, IT or finance expertise to the constituency.' },
+  { icon: 'graduation-cap', title: 'TEIN and Youth Wing', text: 'Organise students and young people on campus and in the community.' },
+];
+
+const wa = whatsappLink('Hello NDC Oforikrom, I would like to connect with TEIN-KNUST.');
+const anchors = [
+  { href: '#join', label: 'Join' },
+  { href: '#volunteer', label: 'Volunteer' },
+  { href: '#tein', label: 'TEIN and Youth' },
+  { href: '#support', label: 'Support' },
+];
+---
+
+<Base title="Get involved" description="Join the NDC in Oforikrom, volunteer as a polling agent or canvasser, connect with TEIN-KNUST, or support the constituency.">
+  <PageHero crumb="Get involved" title="Get involved." intro="However much time you have, there is a place for you in the NDC in Oforikrom. Start here." variant={0}>
+    <nav aria-label="On this page" class="rise mt-8 flex flex-wrap gap-2" style="--d:3">
+      {
+        anchors.map((a) => (
+          <a href={a.href} class="btn btn-outline btn-sm">
+            {a.label}
+          </a>
+        ))
+      }
+    </nav>
+  </PageHero>
+
+  <section id="join" class="wrap scroll-mt-24 py-16 lg:py-24">
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+      <div class="lg:col-span-5">
+        <div class="lg:sticky lg:top-28">
+          <h2 class="display-lg" data-reveal>Join the party</h2>
+          <p class="mt-5 max-w-[42ch] text-lg text-ink-2" data-reveal>
+            Membership is open to every Ghanaian who shares our values. Here is how it works.
+          </p>
+          <ol class="mt-10 space-y-8">
+            {
+              steps.map((s, i) => (
+                <li class="flex gap-5" data-reveal style={`--d:${i + 1}`}>
+                  <span class="grid size-12 shrink-0 place-items-center rounded-full bg-accent text-white">
+                    <Icon name={s.icon} size={22} />
+                  </span>
+                  <div>
+                    <h3 class="font-sans text-lg font-bold tracking-normal">{s.title}</h3>
+                    <p class="mt-1 text-ink-2">{s.text}</p>
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </div>
+      <div class="lg:col-span-7">
+        <div class="rounded-box border border-line bg-card p-6 shadow-[0_24px_60px_-36px_hsl(var(--shadow-tint)/0.5)] sm:p-10" data-reveal>
+          <h3 class="text-2xl font-bold">Sign up</h3>
+          <p class="mb-8 mt-2 text-ink-2">For new members and existing members who want to volunteer.</p>
+          <JoinForm />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="volunteer" class="scroll-mt-24 border-y border-line bg-paper-2 py-16 lg:py-24">
+    <div class="wrap">
+      <div class="max-w-3xl" data-reveal>
+        <h2 class="display-lg">Volunteer roles</h2>
+        <p class="mt-5 max-w-[54ch] text-lg text-ink-2">Pick what suits your time and skills, then tick it on the sign-up form. Training is provided where it is needed.</p>
+      </div>
+      <ul class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          roles.map((r, i) => (
+            <li class={`rounded-box p-6 ${i === 0 ? 'bg-ndc-black text-ndc-white' : 'border border-line bg-card'}`} data-reveal style={`--d:${i % 4}`}>
+              <Icon name={r.icon} size={30} class={i === 0 ? 'text-ndc-white' : 'text-accent-text'} />
+              <h3 class="mt-5 font-sans text-lg font-bold tracking-normal">{r.title}</h3>
+              <p class={`mt-1.5 text-[0.98rem] ${i === 0 ? 'text-ndc-white/80' : 'text-ink-2'}`}>{r.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <a href="#join-form" class="btn btn-primary mt-10">Volunteer <Icon name="arrow-right" class="btn-arrow" /></a>
+    </div>
+  </section>
+
+  <section id="tein" class="wrap scroll-mt-24 py-16 lg:py-24">
+    <div class="relative overflow-hidden rounded-box bg-ndc-green text-white">
+      <div class="absolute inset-y-0 right-0 hidden w-[24%] md:flex" aria-hidden="true">
+        <Kente variant={2} direction="y" class="h-full flex-1" />
+        <Kente variant={0} direction="y" offset={50} class="h-full flex-1" />
+      </div>
+      <div class="relative px-6 py-12 sm:px-12 sm:py-16 md:max-w-[70%]" data-reveal>
+        <Icon name="student" size={40} />
+        <h2 class="display-lg mt-6 text-white">TEIN-KNUST and the Youth Wing</h2>
+        <p class="mt-5 max-w-[52ch] text-lg text-white/90">
+          The Tertiary Educational Institutions Network (TEIN) is the NDC's student wing. At KNUST, it is one of the most active parts of the party in
+          Oforikrom. Young people who are not students can join the constituency Youth Wing.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          {
+            wa ? (
+              <a href={wa} target="_blank" rel="noopener" class="btn btn-light">
+                <Icon name="whatsapp-logo" /> Connect with TEIN
+              </a>
+            ) : (
+              <a href="#join-form" class="btn btn-light">
+                Connect with TEIN <Icon name="arrow-right" class="btn-arrow" />
+              </a>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="support" class="scroll-mt-24 border-t border-line bg-paper-2 py-16 lg:py-24">
+    <div class="wrap grid gap-10 lg:grid-cols-12 lg:items-center">
+      <div class="lg:col-span-6" data-reveal>
+        <h2 class="display-lg">Support the work</h2>
+        <p class="mt-5 max-w-[48ch] text-lg text-ink-2">
+          Membership dues and donations pay for training, transport, materials and events in all 15 electoral areas. Every cedi is accounted for by
+          the constituency treasurer.
+        </p>
+      </div>
+      <div class="lg:col-span-5 lg:col-start-8" data-reveal style="--d:1">
+        {
+          site.donate.momoNumber ? (
+            <div class="rounded-box border border-line bg-card p-8">
+              <p class="text-sm font-semibold text-muted">Mobile Money{site.donate.network && `, ${site.donate.network}`}</p>
+              <p class="mt-2 font-display text-4xl font-extrabold tracking-tight [font-stretch:84%]">{site.donate.momoNumber}</p>
+              {site.donate.momoName && <p class="mt-1 text-ink-2">Name: {site.donate.momoName}</p>}
+              <p class="mt-5 text-sm text-muted">Use your name and electoral area as the reference.</p>
+            </div>
+          ) : (
+            <div class="rounded-box border border-line bg-card p-8">
+              <Icon name="hand-coins" size={34} class="text-go-text" />
+              <p class="mt-4 text-lg font-semibold">Pay dues through your branch</p>
+              <p class="mt-2 text-ink-2">Speak to your branch treasurer, or contact the constituency office for official payment details.</p>
+              <a href="/contact" class="arrow-link mt-5">Contact us <Icon name="arrow-right" size={18} /></a>
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </section>
+</Base>

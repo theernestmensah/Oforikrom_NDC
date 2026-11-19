@@ -1,0 +1,58 @@
+---
+import { getCollection } from 'astro:content';
+import { upcomingEvents } from '../../data/events';
+import EventItem from '../EventItem.astro';
+import Icon from '../Icon.astro';
+import NewsCard from '../NewsCard.astro';
+
+const posts = (await getCollection('news')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const featured = posts.find((p) => p.data.featured) ?? posts[0];
+const rest = posts.filter((p) => p !== featured).slice(0, 3);
+const events = upcomingEvents().slice(0, 3);
+---
+
+<section class="border-t border-line bg-paper-2 py-20 lg:py-28">
+  <div class="wrap grid gap-16 lg:grid-cols-12 lg:gap-12">
+    <div class="lg:col-span-8">
+      <div class="flex items-end justify-between gap-6" data-reveal>
+        <h2 class="display-lg">Latest news</h2>
+        <a href="/news" class="arrow-link shrink-0">All news <Icon name="arrow-right" size={18} /></a>
+      </div>
+      <div class="mt-10 grid gap-10 md:grid-cols-[1.35fr_1fr]">
+        {featured && <div data-reveal><NewsCard post={featured} size="feature" variant={0} /></div>}
+        <div class="flex flex-col gap-8 md:border-l md:border-line md:pl-8">
+          {
+            rest.map((post, i) => (
+              <div data-reveal style={`--d:${i + 1}`}>
+                <NewsCard post={post} variant={i + 1} />
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+
+    <aside class="lg:col-span-4" aria-labelledby="coming-up">
+      <div class="rounded-box border border-line bg-card p-7 sm:p-8" data-reveal style="--d:2">
+        <div class="flex items-center justify-between gap-4">
+          <h2 id="coming-up" class="text-2xl font-bold">Coming up</h2>
+          <Icon name="calendar-blank" size={26} class="text-muted" />
+        </div>
+        {
+          events.length > 0 ? (
+            <ul class="mt-7 space-y-7">
+              {events.map((e) => (
+                <li>
+                  <EventItem event={e} />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="mt-6 text-ink-2">No events are scheduled right now. New dates are posted here and shared with branches first.</p>
+          )
+        }
+        <a href="/events" class="btn btn-outline mt-8 w-full">See all events</a>
+      </div>
+    </aside>
+  </div>
+</section>
